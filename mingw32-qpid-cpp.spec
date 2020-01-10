@@ -7,7 +7,7 @@
 
 Name:		mingw32-qpid-cpp
 Version:	0.12
-Release:	2%{?dist}
+Release:	5%{?dist}
 Summary:	MinGW Windows port of AMQP C++ Daemons and Libraries
 
 Group:		Development/Libraries
@@ -20,15 +20,17 @@ Patch0:		abi.patch
 Patch1:		bz681680.patch
 Patch2:         extern.patch
 Patch3:         qmf2.patch
+Patch4:         dwin32.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:	noarch
 
 BuildRequires:	redhat-rpm-config cmake make ruby ruby-devel python-devel
-BuildRequires:	mingw32-gcc-c++ mingw32-boost mingw32-libxslt mingw32-gnutls
+BuildRequires:  doxygen graphviz
+BuildRequires:	mingw32-gcc-c++ mingw32-boost
 BuildRequires:	mingw32-filesystem >= 57
-Requires:	mingw32-boost mingw32-libxslt mingw32-gnutls 
+Requires:	mingw32-boost
 
 %description
 MinGW cross-compiled daemons and run-time libraries for AMQP client
@@ -43,6 +45,7 @@ an AMQP message broker using the AMQP protocol.
 %patch1 -p2
 %patch2 -p2
 %patch3 -p2
+%patch4 -p1
 
 %build
 %{__mkdir_p} build
@@ -52,7 +55,8 @@ pushd build
 		-DBUILD_MSSQL:BOOL=OFF			\
 		-DBUILD_SSL:BOOL=OFF			\
                 -DBoost_DETAILED_FAILURE_MSG:BOOL=ON	\
-		-DBoost_COMPILER:STRING=-gcc44 ../cpp
+		-DBoost_COMPILER:STRING=-gcc44 ../cpp   \
+		-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--export-all-symbols
 popd
 
 make -C build VERBOSE=1 %{?_smp_mflags}
@@ -87,6 +91,22 @@ rm -rf $RPM_BUILD_ROOT
 %doc cpp/RELEASE_NOTES
 
 %changelog
+* Tue Apr 24 2012 Ted Ross <tross@redhat.com> - 0.12-5
+- Remove unneeded dependencies
+- Related: rhbz#813537
+- Related: rhbz#807345
+
+* Tue Jan 26 2012 Kai Tietz <ktietz@redhat.com> - 0.12-4
+- Rebuild for 6.3
+- Related: rhbz#751349
+
+* Tue Jan 10 2012 Kai Tietz <ktietz@redhat.com> - 0.12-3
+- Disable html documentation generation.
+- Add doxygen and graphviz as build-requirement
+- Add dwin32.patch for fixing WIN32 vs. _WIN32 definition checks.
+- Add linker option -Wl,--export-all-symbols
+- Related: rhbz#751349
+
 * Wed Oct 19 2011 Ted Ross <tross@redhat.com> - 0.12-2
 - Related: rhbz#741015
 

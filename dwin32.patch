@@ -1,0 +1,87 @@
+Index: qpid-cpp-0.12/cpp/include/qmf/engine/QmfEngineImportExport.h
+===================================================================
+--- qpid-cpp-0.12.orig/cpp/include/qmf/engine/QmfEngineImportExport.h
++++ qpid-cpp-0.12/cpp/include/qmf/engine/QmfEngineImportExport.h
+@@ -20,7 +20,7 @@
+  * under the License.
+  */
+ 
+-#if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
++#if defined(_WIN32) && !defined(QPID_DECLARE_STATIC)
+ #  if defined(QMF_EXPORT) || defined (qmfengine_EXPORTS)
+ #    define QMFE_EXTERN __declspec(dllexport)
+ #  else
+Index: qpid-cpp-0.12/cpp/include/qpid/ImportExport.h
+===================================================================
+--- qpid-cpp-0.12.orig/cpp/include/qpid/ImportExport.h
++++ qpid-cpp-0.12/cpp/include/qpid/ImportExport.h
+@@ -33,7 +33,7 @@
+ // QPID_INLINE_IMPORT  - Import declaration for Inline methods
+ //
+ 
+-#if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
++#if defined(_WIN32) && !defined(QPID_DECLARE_STATIC)
+    //
+    // Import and Export definitions for Windows:
+    //
+Index: qpid-cpp-0.12/cpp/src/qpid/broker/BrokerImportExport.h
+===================================================================
+--- qpid-cpp-0.12.orig/cpp/src/qpid/broker/BrokerImportExport.h
++++ qpid-cpp-0.12/cpp/src/qpid/broker/BrokerImportExport.h
+@@ -20,7 +20,7 @@
+  * under the License.
+  */
+ 
+-#if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
++#if defined(_WIN32) && !defined(QPID_DECLARE_STATIC)
+ #  if defined(BROKER_EXPORT) || defined (qpidbroker_EXPORTS)
+ #    define QPID_BROKER_EXTERN __declspec(dllexport)
+ #  else
+Index: qpid-cpp-0.12/cpp/src/qpid/sys/alloca.h
+===================================================================
+--- qpid-cpp-0.12.orig/cpp/src/qpid/sys/alloca.h
++++ qpid-cpp-0.12/cpp/src/qpid/sys/alloca.h
+@@ -21,7 +21,7 @@
+  *
+  */
+ 
+-#if (defined(_WINDOWS) || defined (WIN32))
++#if (defined(_WINDOWS) || defined (_WIN32))
+ #  include <malloc.h>
+ 
+ #  if defined(_MSC_VER)
+Index: qpid-cpp-0.12/cpp/src/tests/shlibtest.cpp
+===================================================================
+--- qpid-cpp-0.12.orig/cpp/src/tests/shlibtest.cpp
++++ qpid-cpp-0.12/cpp/src/tests/shlibtest.cpp
+@@ -23,7 +23,7 @@ namespace tests {
+ 
+ int* loaderData = 0;
+ extern "C"
+-#ifdef WIN32
++#ifdef _WIN32
+ __declspec(dllexport)
+ #endif
+ void callMe(int *i) { loaderData=i; }
+Index: qpid-cpp-0.12/cpp/src/CMakeLists.txt
+===================================================================
+--- qpid-cpp-0.12.orig/cpp/src/CMakeLists.txt
++++ qpid-cpp-0.12/cpp/src/CMakeLists.txt
+@@ -239,15 +239,9 @@ if (GEN_MANPAGES AND NOT HELP2MAN)
+ endif (GEN_MANPAGES AND NOT HELP2MAN)
+ 
+ # FindDoxygen module tries to locate doxygen and Graphviz dot
+-set (docs_default ON)
+-if (NOT DOXYGEN_EXECUTABLE)
+-  set (docs_default OFF)
+-endif (NOT DOXYGEN_EXECUTABLE)
++set (docs_default OFF)
+ option(GEN_DOXYGEN "Use doxygen to generate user documentation" ${docs_default})
+-if (GEN_DOXYGEN AND NOT DOXYGEN_EXECUTABLE)
+-  message(STATUS "Can't locate the doxygen command; user documentation will not be generated")
+-  set (GEN_DOXYGEN OFF)
+-endif (GEN_DOXYGEN AND NOT DOXYGEN_EXECUTABLE)
++set (GEN_DOXYGEN OFF)
+ 
+ find_program(VALGRIND valgrind DOC "Location of the valgrind program")
+ option(ENABLE_VALGRIND "Use valgrind to detect run-time problems" ON)
