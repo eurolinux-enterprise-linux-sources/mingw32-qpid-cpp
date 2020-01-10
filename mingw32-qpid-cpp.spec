@@ -6,18 +6,20 @@
 %define __debug_install_post %{_mingw32_debug_install_post}
 
 Name:		mingw32-qpid-cpp
-Version:	0.10
-Release:	1%{?dist}
+Version:	0.12
+Release:	2%{?dist}
 Summary:	MinGW Windows port of AMQP C++ Daemons and Libraries
 
 Group:		Development/Libraries
 License:	ASL 2.0
 URL:		http://qpid.apache.org
 
-Source0:	http://people.apache.org/~robbie/qpid/%{version}/RC3/qpid-%{version}.tar.gz
+Source0:	http://people.apache.org/~robbie/qpid/%{version}/RC3/qpid-cpp-%{version}.tar.gz
 
-Patch0:		qpid.patch
-Patch1:         mingw32.patch
+Patch0:		abi.patch
+Patch1:		bz681680.patch
+Patch2:         extern.patch
+Patch3:         qmf2.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -36,9 +38,11 @@ an AMQP message broker using the AMQP protocol.
 %{_mingw32_debug_package}
 
 %prep
-%setup -q -n qpid-%{version}
+%setup -q -n qpid-cpp-%{version}
 %patch0 -p2
 %patch1 -p2
+%patch2 -p2
+%patch3 -p2
 
 %build
 %{__mkdir_p} build
@@ -83,6 +87,17 @@ rm -rf $RPM_BUILD_ROOT
 %doc cpp/RELEASE_NOTES
 
 %changelog
+* Wed Oct 19 2011 Ted Ross <tross@redhat.com> - 0.12-2
+- Related: rhbz#741015
+
+* Mon Aug 15 2011 Ted Ross <tross@redhat.com> - 0.12-1
+- Rebase to match the native RHEL6 package (qpid-cpp)
+- Related: rhbz#706994
+
+* Mon Aug 15 2011 Ted Ross <tross@redhat.com> - 0.10-2
+- Build to match the native RHEL6 package (qpid-cpp)
+- Related: rhbz#706949
+
 * Mon Mar 28 2011 Ted Ross <tross@redhat.com> - 0.10-1
 - Rebase the build to match the native RHEL6 package (qpid-cpp)
 - Related: rhbz#690268

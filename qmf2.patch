@@ -1,0 +1,45 @@
+diff --git a/qpid/cpp/src/CMakeLists.txt b/qpid/cpp/src/CMakeLists.txt
+index 80315b9..978d962 100644
+--- a/qpid/cpp/src/CMakeLists.txt
++++ b/qpid/cpp/src/CMakeLists.txt
+@@ -1081,7 +1081,7 @@ install (TARGETS qmf OPTIONAL
+          COMPONENT ${QPID_COMPONENT_QMF})
+ install_pdb (qmf ${QPID_COMPONENT_QMF})
+ 
+-if(NOT WIN32)
++#if(NOT WIN32)
+     set (qmf2_HEADERS
+         ../include/qmf/AgentEvent.h
+         ../include/qmf/Agent.h
+@@ -1156,7 +1156,7 @@ if(NOT WIN32)
+             DESTINATION ${QPID_INSTALL_INCLUDEDIR}/qmf
+             COMPONENT ${QPID_COMPONENT_QMF})
+     install_pdb (qmf2 ${QPID_COMPONENT_QMF})
+-endif (NOT WIN32)
++#endif (NOT WIN32)
+ 
+ set (qmfengine_SOURCES
+      qmf/engine/Agent.cpp
+diff --git a/qpid/cpp/src/qpid/messaging/AddressParser.h b/qpid/cpp/src/qpid/messaging/AddressParser.h
+index 1635331..c51200c 100644
+--- a/qpid/cpp/src/qpid/messaging/AddressParser.h
++++ b/qpid/cpp/src/qpid/messaging/AddressParser.h
+@@ -26,13 +26,13 @@
+ namespace qpid {
+ namespace messaging {
+ 
+-class AddressParser
++class QPID_MESSAGING_CLASS_EXTERN AddressParser
+ {
+   public:
+-    AddressParser(const std::string&);
+-    bool parse(Address& address);
+-    bool parseMap(qpid::types::Variant::Map& map);
+-    bool parseList(qpid::types::Variant::List& list);
++    QPID_MESSAGING_EXTERN AddressParser(const std::string&);
++    QPID_MESSAGING_EXTERN bool parse(Address& address);
++    QPID_MESSAGING_EXTERN bool parseMap(qpid::types::Variant::Map& map);
++    QPID_MESSAGING_EXTERN bool parseList(qpid::types::Variant::List& list);
+   private:
+     const std::string& input;
+     std::string::size_type current;
